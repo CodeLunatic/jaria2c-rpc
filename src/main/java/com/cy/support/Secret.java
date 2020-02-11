@@ -14,6 +14,9 @@ package com.cy.support;
 public interface Secret {
 
     static String token(String token) {
+        if (token == null) {
+            token = "";
+        }
         return "token:" + token;
     }
 }
