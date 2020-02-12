@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用来标识属性字段，让属性和Aria2c的选项对应上
+ *
  * @author CY
  */
 @Target(ElementType.FIELD)

@@ -3,6 +3,13 @@ package com.cy.output;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * Aria2cTorrent中info属性的子结构
+ *
+ * @author CY
+ * <p>
+ * TODO 未进行文档人工翻译
+ */
 @Data
 public class Aria2cTorrentInfo {
 

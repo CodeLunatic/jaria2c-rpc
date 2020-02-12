@@ -5,6 +5,13 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * Aria2cStatus中bitTorrent属性的子结构
+ *
+ * @author CY
+ * <p>
+ * TODO 未进行文档人工翻译
+ */
 @Data
 public class Aria2cTorrent {
 
@@ -38,6 +45,4 @@ public class Aria2cTorrent {
      */
     @JsonProperty("info")
     private Aria2cTorrentInfo info;
-
-
 }

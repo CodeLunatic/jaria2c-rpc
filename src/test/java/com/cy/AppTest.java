@@ -3,20 +3,19 @@ package com.cy;
 import com.cy.input.Aria2cCall;
 import com.cy.input.Aria2cOptions;
 import com.cy.output.*;
+import com.cy.run.Aria2cRpcOptions;
 import com.cy.support.Options;
 import com.cy.support.Secret;
-import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
-import com.googlecode.jsonrpc4j.ProxyUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,35 +30,36 @@ public class AppTest {
 
     private static String token = Secret.token(null);
 
-    public static void main(String[] args) throws MalformedURLException {
-        new AppTest().init();
-        testTellStatus();
-    }
+    /**
+     * 一个下载的例子，QQ
+     */
+    public static void main(String[] args) {
 
-    public static void testTellStatus() {
+        new AppTest().init();
+
         String[] uris = {
-                "https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20200209-5ad1c1a-win64-static.zip"
+                "https://qd.myapp.com/myapp/qqteam/pcqq/PCQQ2020.exe"
         };
-        String gid = aria2c.addUri(token, uris, Options.empty(), Integer.MAX_VALUE);
+
+        Options of = Options.of(Aria2cOptions.builder()
+                .dir(desktopPath + "下载目录")
+                .out("QQ.exe")
+                .build());
+
+        String gid = aria2c.addUri(token, uris, of, Integer.MAX_VALUE);
+
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             Aria2cStatus downloadStatus = aria2c.tellStatus(token, gid, new String[]{});
-            log.debug("响应的数据：{}", downloadStatus);
-            Assertions.assertNotNull(downloadStatus);
+            log.debug("当前的下载速度：{}，响应的数据：{}", downloadStatus.getDownloadSpeed(), downloadStatus);
         }, 0, 1, TimeUnit.SECONDS);
     }
 
     @BeforeEach
-    public void init() throws MalformedURLException {
-        JsonRpcHttpClient client = new JsonRpcHttpClient(
-                new URL("http://localhost:6800/jsonrpc"));
-
-        aria2c = ProxyUtil.createClientProxy(
-                AppTest.class.getClassLoader(),
-                Aria2c.class,
-                client);
-
-        token = Secret.token("12345678");
+    public void init() {
+        aria2c = Aria2c.getInstance();
+        token = Secret.token(Aria2cRpcOptions.getInstance().getRpcSecret());
+        System.out.println(Aria2cRpcOptions.getInstance());
     }
 
     @Test
@@ -68,23 +68,15 @@ public class AppTest {
         String[] uris = {
                 "https://qd.myapp.com/myapp/qqteam/pcqq/PCQQ2020.exe"
         };
-
-        String gid = aria2c.addUri(token, uris, Options.empty(), Integer.MAX_VALUE);
+        Options of = Options.of(Aria2cOptions.builder().dir(desktopPath + "下载目录").build());
+        String gid = aria2c.addUri(token, uris, of, Integer.MAX_VALUE);
         log.debug(gid);
         Assertions.assertNotNull(gid);
     }
 
-    private String inputStream2Base64(InputStream inputStream) {
-        try {
-            return Base64.getEncoder().encodeToString(inputStream.readAllBytes());
-        } catch (IOException e) {
-            return "";
-        }
-    }
-
     @Test
     public void testAddTorrent() throws IOException {
-        String torrent = inputStream2Base64(
+        String torrent = Aria2c.inputStream2Base64(
                 new FileInputStream(desktopPath + "[JYFanSub][Occultic;Nine][12][GB_CN][HEVC][720p].torrent"));
 
         String gid = aria2c.addTorrent(token, torrent, new String[]{}, Options.empty(), Integer.MAX_VALUE);
@@ -95,7 +87,7 @@ public class AppTest {
 
     @Test
     public void testAddMetaLink() throws FileNotFoundException {
-        String metalink = inputStream2Base64(
+        String metalink = Aria2c.inputStream2Base64(
                 new FileInputStream(desktopPath + "TED-talks-in-low-quality.eu.metalink"));
 
         String[] gids = aria2c.addMetaLink(token, metalink, Options.empty(), Integer.MAX_VALUE);
@@ -133,7 +125,7 @@ public class AppTest {
         String[] uris = {
                 "https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20200209-5ad1c1a-win64-static.zip"
         };
-        String gid = aria2c.addUri(token, uris, Options.empty(), Integer.MAX_VALUE);
+        aria2c.addUri(token, uris, Options.empty(), Integer.MAX_VALUE);
         Thread.sleep(10000);
         String gid2 = aria2c.pauseAll(token);
         log.debug(gid2);
@@ -357,7 +349,7 @@ public class AppTest {
                         )
                 ).build();
 
-        Object[] multiCall = aria2c.multiCall(call, call);
+        Object[] multiCall = aria2c.multicall(call, call);
         log.debug("返回: {}", Arrays.toString(multiCall));
         Assertions.assertEquals(2, multiCall.length);
     }

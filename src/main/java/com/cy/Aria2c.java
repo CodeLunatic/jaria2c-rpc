@@ -2,9 +2,20 @@ package com.cy;
 
 import com.cy.input.Aria2cCall;
 import com.cy.output.*;
+import com.cy.run.Aria2cRpcOptions;
+import com.cy.run.Aria2cRunUtils;
+import com.cy.support.BaseData;
 import com.cy.support.Options;
+import com.googlecode.jsonrpc4j.JsonRpcHttpClient;
 import com.googlecode.jsonrpc4j.JsonRpcMethod;
+import com.googlecode.jsonrpc4j.ProxyUtil;
 import lombok.NonNull;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Base64;
 
 /**
  * 声明了Aria2的所有的方法，该接口中的所有的方法都拥有重载，一个是所有参数，一个是必要参数
@@ -18,10 +29,46 @@ import lombok.NonNull;
  * 对于RPC访问，它表示为16个字符的十六进制字符串(例如，2089b05ecca3d829)。
  * 通常，aria2为每个下载生成这个GID，但是用户可以使用--gid选项手动指定GID。
  * 当通过GID查询下载时，可以只指定GID的前缀部分，只要他是唯一的就行。
+ * <p>
+ * TODO 未进行文档人工翻译
  *
  * @author CY
  */
 public interface Aria2c {
+
+    /**
+     * 将InputStream转换成Base64编码
+     *
+     * @param inputStream 输入流
+     * @return Base64编码
+     */
+    static String inputStream2Base64(InputStream inputStream) {
+        try {
+            return Base64.getEncoder().encodeToString(inputStream.readAllBytes());
+        } catch (IOException e) {
+            return "";
+        }
+    }
+
+    /**
+     * 获取Aria2c的实例
+     *
+     * @return Aria2c
+     */
+    static Aria2c getInstance() {
+        Aria2cRunUtils.run(BaseData.ARIA2C_FILE);
+        JsonRpcHttpClient client = null;
+        try {
+            Integer port = Aria2cRpcOptions.getInstance().getRpcListenPort();
+            client = new JsonRpcHttpClient(
+                    new URL(String.format("http://127.0.0.1:%s/jsonrpc", port)));
+        } catch (MalformedURLException ignored) {
+        }
+        return ProxyUtil.createClientProxy(
+                Aria2c.class.getClassLoader(),
+                Aria2c.class,
+                client);
+    }
 
     /*=====================Aria2的所有方法====================*/
 
@@ -660,7 +707,7 @@ public interface Aria2c {
      * 如果封装的方法调用失败，则元素将是包含方法调用的返回值的单项数组，或者是故障元素的结构。
      */
     @JsonRpcMethod(MULTI_CALL)
-    Object[] multiCall(Aria2cCall... methods);
+    Object[] multicall(Aria2cCall... methods);
 
     /**
      * https://aria2.github.io/manual/en/html/aria2c.html#system.listMethods
@@ -685,6 +732,4 @@ public interface Aria2c {
      */
     @JsonRpcMethod(LIST_NOTIFICATIONS)
     String[] listNotifications();
-
-
 }

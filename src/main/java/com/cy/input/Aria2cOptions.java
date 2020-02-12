@@ -9,9 +9,14 @@ import lombok.Builder;
  * 由于key在Map中应该是唯一的（许多XML-RPC库实现对结构使用哈希或dict），因此仅一个字符串是不够的。
  * 为了克服此限制，您可以使用数组作为值以及字符串。
  * 可选参数有110个
+ * <p>
+ * TODO 未进行文档人工翻译
  */
 @Builder
 public class Aria2cOptions {
+
+    /*======================Input File部分=========================*/
+    /*https://aria2.github.io/manual/en/html/aria2c.html#input-file*/
 
     /**
      * 对所有协议使用代理服务器。
@@ -592,7 +597,10 @@ public class Aria2cOptions {
     @OptionName(value = "user-agent")
     private String userAgent;
 
-    /*============Global Option=============*/
+
+    /*================TODO 没有添加Option解释==========*/
+    /*https://aria2.github.io/manual/en/html/aria2c.html#aria2.changeGlobalOption*/
+    /*=================Global Option=================*/
 
     @OptionName("bt-max-open-files")
     private Long btMaxOpenFiles;

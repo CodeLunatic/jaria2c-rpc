@@ -4,6 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.ToString;
 
+/**
+ * https://aria2.github.io/manual/en/html/aria2c.html#aria2.getOption
+ * https://aria2.github.io/manual/en/html/aria2c.html#aria2.getGlobalOption
+ * <p>
+ * aria2.getOption()和aria2.getGlobalOption()方法的返回值
+ * <p>
+ * TODO 未进行文档人工翻译
+ */
 @Getter
 @ToString
 public class Aria2cOption {

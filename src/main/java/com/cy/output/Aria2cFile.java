@@ -3,8 +3,16 @@ package com.cy.output;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+/**
+ * https://aria2.github.io/manual/en/html/aria2c.html#aria2.getFiles
+ * <p>
+ * aria2.getFiles()的返回值
+ * <p>
+ * TODO 未进行文档人工翻译
+ */
 @Data
 public class Aria2cFile {
+
     /**
      * 文件的索引，从1开始，与文件在多文件torrent中的显示顺序相同。
      */
@@ -34,7 +42,7 @@ public class Aria2cFile {
 
     /**
      * true如果通过--select-file选项选择了此文件。
-     * 如果 --select-file未指定，或者这是单文件洪流或根本不是洪流下载，
+     * 如果 --select-file未指定，或者这是单文件种子或根本不是种子下载，
      * 则此值始终为true。否则 false。
      */
     @JsonProperty("selected")

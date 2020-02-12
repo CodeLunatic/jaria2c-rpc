@@ -43,7 +43,11 @@ public class Options extends HashMap<String, Object> {
                 if (value == null) {
                     continue;
                 }
-                String key = field.getAnnotation(OptionName.class).value();
+                OptionName optionName = field.getAnnotation(OptionName.class);
+                if (optionName == null) {
+                    continue;
+                }
+                String key = optionName.value();
                 option.put(key, value);
             } catch (IllegalAccessException ignored) {
             }

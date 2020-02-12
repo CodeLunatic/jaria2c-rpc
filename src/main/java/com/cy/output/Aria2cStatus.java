@@ -4,7 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
- * TODO 这个包下面的类型和注释，需要修改
+ * https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStatus
+ * https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellActive
+ * https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellWaiting
+ * https://aria2.github.io/manual/en/html/aria2c.html#aria2.tellStopped
+ * aria2.tellStatus/aria2.tellActive/aria2.tellWaiting/aria2.tellStopped方法的返回值
+ * <p>
+ * TODO 未进行文档人工翻译
  *
  * @author CY
  */

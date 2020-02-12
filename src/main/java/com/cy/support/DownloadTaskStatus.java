@@ -1,5 +1,10 @@
 package com.cy.support;
 
+/**
+ * 下载任务的状态
+ *
+ * @author CY
+ */
 public class DownloadTaskStatus {
 
     /**

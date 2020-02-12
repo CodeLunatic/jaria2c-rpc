@@ -3,6 +3,8 @@ package com.cy.support;
 /**
  * 用来填写Secret参数
  * <p>
+ * TODO 未进行文档人工翻译
+ * <p>
  * 从1.18.4版本开始，除了HTTP基本授权外，aria2还提供RPC方法级别的授权。
  * 在将来的版本中，将删除HTTP基本授权，而RPC方法级别的授权将变为强制性。
  * <p>
