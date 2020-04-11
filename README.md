@@ -49,3 +49,5 @@ public static void main(String[] args) {
 ```
 
 需要进行官方文档翻译和代码整改工作...
+
+该仓库代码是直接中`Anything-Download`仓库中抽取出来的，所以有些代码看起来非常的怪异，如果再用到Aria2c会好好修改一下代码。
